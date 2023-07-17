@@ -25,7 +25,7 @@ def get_ship_location():
         print("Please enter a valid row ")
         row=input('Please enter a ship row 1-7 ')
     #Enter the Ship column from A TO G
-    column=input('Please enter a ship column A-G ') 
+    column=input('Please enter a ship column A-G ').upper() 
     while column not in 'ABCDEFG':
         print("Please enter a valid column ")
         column=input('Please enter a ship column A-G ')
