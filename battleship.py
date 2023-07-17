@@ -17,14 +17,17 @@ def count_hit_ships(board):
                 count+=1
     return count
 while True:
-    print('Welcome to Battleship, Lets Play !!')
+    a = input("Would you like to play by yourself?")
+    if a == " No" or a == " No":
+        exit
+    print('Welcome to Battleship, Lets Play !!') 
     Hidden_Pattern=[[' ']*7 for x in range(7)]
     Guess_Pattern=[[' ']*7 for x in range(7)]
 
     let_to_num={'A':0,'B':1,'C':2,'D':3,'E':4,'F':5,'G':6}
     create_ships(Hidden_Pattern)
     #print_board(Hidden_Pattern)
-    turns = 10
+    turns = 2
     while turns > 0:
         print_board(Guess_Pattern)
         row,column =get_ship_location()
@@ -46,6 +49,5 @@ while True:
             print('You lost')
             break 
     a = input("Would you like to play again?")
-    if a == "No" or a == "no":
-        break
-    
+    if a == " No" or a == " no":
+       break
