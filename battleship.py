@@ -1,20 +1,19 @@
 from random import randint
+from string import ascii_uppercase as letters
 
 
 def create_board():
     try:
-        size = eval(input("please enter a size"))
+        size = eval(input("Please enter a size: "))
     except:
-        print("that is not a number")
+        print("That is not a number, try again")
 
-    Hidden_Pattern=[['0']*size for x in range(size)]
-    Guess_Pattern=[['0']*size for x in range(size)]
+    Hidden_Pattern=[[' ']*size for x in range(size)]
+    Guess_Pattern=[[' ']*size for x in range(size)]
 
     return Hidden_Pattern, Guess_Pattern, size
 
 def print_board(board):
-    print('  A B C D E F G')
- 
     row_num=1
     for row in board:
         print("%d|%s|" % (row_num, "|".join(row)))
@@ -38,10 +37,10 @@ def get_ship_location():
 # starts at line 33
 # This function creates the ships
 def create_ships(board):
-    for ship in range(7):
-        ship_r, ship_cl=randint(0,6), randint(0,6)
+    for ship in range(size):
+        ship_r, ship_cl=randint(0,size-1), randint(0,size-1)
         while board[ship_r][ship_cl] =='X':
-            ship_r, ship_cl = randint(0, 6), randint(0, 6)
+            ship_r, ship_cl = randint(0, size-1), randint(0, size-1)
         board[ship_r][ship_cl] = 'X'
 
 def input_validation(row, column, size):
@@ -61,16 +60,15 @@ def count_hit_ships(board):
                 count+=1
     return count
 while True:
-    a = input("Do you want to place the ships?")
-    if a == " Myself" or a == " by myself" or a == " By Myself" or a == " By myself":
-        break
-    else:
+    a = input("Do you want the ships placed by yourself? ")
+    if a == "No" or a == "no":
         print('Welcome to Battleship, Lets Play !!') 
         Hidden_Pattern, Guess_Pattern, size = create_board()
 
         let_to_num={'A':0,'B':1,'C':2,'D':3,'E':4,'F':5,'G':6}
         create_ships(Hidden_Pattern)
         #print_board(Hidden_Pattern)
+        
         turns = 10
         while turns > 0:
             print_board(Guess_Pattern)
@@ -83,7 +81,7 @@ while True:
                 Guess_Pattern[row][column] = 'O'
                 turns -= 1
             else:
-                print ("You hit " + str(row+1) +' ' + abc[column])
+                print (f"You hit ({str(row+1)},{abc[column]})")
                 print('You missed LOL')
                 Guess_Pattern[row][column] = 'x'
                 turns -= 1
@@ -97,4 +95,3 @@ while True:
         a = input("Would you like to play again?")
         if a == " No" or a == " no":
             break
-    
