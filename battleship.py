@@ -1,7 +1,16 @@
 from random import randint
 
-Hidden_Pattern=[['0']*7 for x in range(7)]
-Guess_Pattern=[['0']*7 for x in range(7)]
+
+def create_board():
+    try:
+        size = eval(input("please enter a size"))
+    except:
+        print("that is not a number")
+
+    Hidden_Pattern=[['0']*size for x in range(size)]
+    Guess_Pattern=[['0']*size for x in range(size)]
+
+    return Hidden_Pattern, Guess_Pattern, size
 
 def print_board(board):
     print('  A B C D E F G')
@@ -35,7 +44,14 @@ def create_ships(board):
             ship_r, ship_cl = randint(0, 6), randint(0, 6)
         board[ship_r][ship_cl] = 'X'
 
-
+def input_validation(row, column, size):
+    
+    if row not in range(size):
+        print("please enter a number on the board")
+    
+    if column not in range (size):
+        print("please enter a number on the board")
+        
 
 def count_hit_ships(board):
     count=0
@@ -50,8 +66,7 @@ while True:
         break
     else:
         print('Welcome to Battleship, Lets Play !!') 
-        Hidden_Pattern=[['0']*7 for x in range(7)]
-        Guess_Pattern=[['0']*7 for x in range(7)]
+        Hidden_Pattern, Guess_Pattern, size = create_board()
 
         let_to_num={'A':0,'B':1,'C':2,'D':3,'E':4,'F':5,'G':6}
         create_ships(Hidden_Pattern)
@@ -63,7 +78,7 @@ while True:
             if Guess_Pattern[row][column] == 'O':
                 print(' You already guessed that, try again. ')
             elif Hidden_Pattern[row][column] =='X':
-                print ("You hit " + str(row+1) +' ' + abc[column])
+                print (f"You hit ({str(row+1)},{abc[column]})")
                 print(' Congrats, you have hit a ship ')
                 Guess_Pattern[row][column] = 'O'
                 turns -= 1
@@ -82,5 +97,4 @@ while True:
         a = input("Would you like to play again?")
         if a == " No" or a == " no":
             break
-    
     
