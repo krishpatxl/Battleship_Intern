@@ -61,7 +61,7 @@ def count_hit_ships(board):
                 count+=1
     return count
 while True:
-    a = input("How do you want the ships placed?")
+    a = input("Do you want to place the ships?")
     if a == " Myself" or a == " by myself" or a == " By Myself" or a == " By myself":
         break
     else:
