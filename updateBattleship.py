@@ -2,9 +2,10 @@ from random import randint
 from string import ascii_uppercase as letters
 
 #Creating the board
+
 def create_board():
     try:
-        size = eval(input("Please enter a size:"))
+        size = eval(input("Please enter a size: "))
     except:
         print("That is not a number, try again")
 
@@ -36,18 +37,16 @@ def get_ship_location():
 #starts at line 33
 #This function creates the ships
 def create_ships(board):
-    for ship in range(size):
-        ship_r, ship_cl=randint(0,size-1), randint(0, size-1)
-        while board[ship_r][ship_cl] =='X':
-            ship_r, ship_cl = randint(0, size-1), randint(0, size-1)
+        ship_r, ship_cl = randint(0, size-1), randint(0, size-1)
         board[ship_r][ship_cl] = 'X'
+        
 def input_validation(row, column, size):
 
     if row not in range(size):
-        print("Please enter a number on the board")
+        print("Please enter a number on the board: ")
 
     if column not in range (size):
-        print("Please enter a number on the board")
+        print("Please enter a number on the board: ")
 def count_hit_ships(board):
     count=0
     for row in board:
@@ -64,10 +63,10 @@ while True:
         
 
         let_to_num={'A':0,'B':1,'C':2,'D':3,'E':4,'F':5,'G':6,'H':7,'I':8,'J':9}
-        #create_ships(Hidden_Pattern)
+        create_ships(Hidden_Pattern)
         #print_board(Hidden_Pattern)
 
-        turns = 36
+        turns = 100
         while turns > 0:
             print_board(Guess_Pattern)
             row,column = get_ship_location()
@@ -84,7 +83,7 @@ while True:
                 Guess_Pattern[row][column] = 'x'
                 turns -= 1
             if  count_hit_ships(Guess_Pattern) == 7:
-                print("You hit all the ships")
+                print("You sunk all the ships, congrats!")
                 break
             print(' You have ' +str(turns) + ' tries left ')
             if turns == 0:
@@ -96,8 +95,17 @@ while True:
         
     else: 
         a == "Yes" or a =="yes"
+        user_input = input("A")
+        
+        def convert_letter(string_thing):
+            num = ord(user_input.upper()) - 65
+            return num
+        
+        print(convert_letter(user_input))
         row=input('Please enter a ship row: ')
         while row not in '12345678910':
             print("Please enter a valid row ")
         column=input("Please enter a ship column: ")
         print_board(Hidden_Pattern)
+    
+                
