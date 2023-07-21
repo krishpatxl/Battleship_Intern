@@ -3,7 +3,7 @@
 We are apart of a 2023 SWEG Internship and this is one of the codes we want to show off. What we did was we were asked to code a program for the well know game of Battleship. So we are taking a simple game code and progressively getting harder during waves/stages to go more indepth complex for us to code but the user of the game will be able to do more and more.  
 
 # How do I play?
- In order to play the game, you have to to first select your grid size and the sizes go from a 2x2 to whatever you want but for our code we recommend that a 10x10 would be the biggest you go. after you do that it prints 'Welcome to Battlehsip!'
+ In order to play the game, you have to to first select your grid size and the sizes go from a 2x2 to whatever you want but for our code we recommend that a 10x10 would be the biggest you go, after you do that it prints 'Welcome to Battlehsip!'
 
 After entering your grid size it is going to print the board with your selected grid size. Once doing that it is going to ask if you would like to manually enter your ship or not with a simple (yes/no)
 
