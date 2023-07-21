@@ -7,8 +7,11 @@ We are apart of a 2023 SWEG Internship and this is one of the codes we want to s
 
 After entering your grid size it is going to print the board with your selected grid size. Once doing that it is going to ask if you would like to manually enter your ship or not with a simple (yes/no)
 
-If you entered 'yes' follow these instructions!!
-yes- you will be prompted to enter a name for your ship it is recommended that you do a one letter name for your ship. Next you will enter the row you want your ship on and another prompt is going to ask what column you want your ship on. After doing these two steps it will load up the board and take you into the game
-If entered 'no' follow these instructions!!
-no- the computer will generate a spot for your ships and it will then proceed to take you into the game
+If you entered 'YES' follow these instructions!!
+
+YES - you will be prompted to enter a name for your ship it is recommended that you do a one letter name for your ship. Next you will enter the row you want your ship on and another prompt is going to ask what column you want your ship on. After doing these two steps it will load up the board and take you into the game
+
+If entered 'NO' follow these instructions!!
+
+NO - the computer will generate a spot for your ships and it will then proceed to take you into the game
 When it takes you into the game all you will have to do from that point on is enter the row & column spot you want to hit in this format (x x) without the parethesis though. You will go back and forth with the comouter until someboyd wins and you are prompted and asked if you want to play again in a (yes/no) format. 
