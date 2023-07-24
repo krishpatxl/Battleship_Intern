@@ -9,9 +9,9 @@ After entering your grid size it is going to print the board with your selected 
 
 If you entered 'YES' follow these instructions!!
 
-YES - you will be prompted to enter a name for your ship it is recommended that you do a one letter name for your ship. Next you will enter the row you want your ship on and another prompt is going to ask what column you want your ship on. After doing these two steps it will load up the board and take you into the game
+YES - You will be asked to enter the number of ships you want first. you will be prompted to enter a name for your ship it is recommended that you do a one letter name for your ship. After this it is going to ask what length do you want your ship (1 or 2). Right before you get to the row/column indexes you have to input weather it will be a horizontal or vertical ship. Next you will enter the row you want your ship on and another prompt is going to ask what column you want your ship on. After doing these two steps it will load up the board and take you into the game. FOLLOW THE NO DIRECTIONS BELOW FROM HERE!!!
 
 If entered 'NO' follow these instructions!!
 
 NO - the computer will generate a spot for your ships and it will then proceed to take you into the game
-When it takes you into the game all you will have to do from that point on is enter the row & column spot you want to hit in this format (x x) without the parethesis though. You will go back and forth with the comouter until someboyd wins and you are prompted and asked if you want to play again in a (yes/no) format. 
+When it takes you into the game all you will have to do from that point on is enter the row & column spot you want to hit in this format (x x) without the parethesis though. You will go back and forth with the computer until somebody wins and you are prompted and asked if you want to play again in a (yes/no) format. 
