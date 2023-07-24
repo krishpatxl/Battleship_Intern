@@ -1,3 +1,4 @@
+
 import random
 
 def create_grid(size):
@@ -7,21 +8,42 @@ def print_board(grid, size):
     for row in grid:
         print(' '.join('X' if col == 'U' else col for col in row))
 
-def place_ship(grid, name, length, size, row, col):
-    if 1 <= row <= size and 1 <= col + length <= size:
-        row -= 1
-        col -= 1
-    else:
-        print("Invalid ship placement. Ship does not fit on the grid.")
-        return False
-
-    for i in range(length):
-        if grid[row][col + i] != 'O':
-            print("Invalid ship placement. Overlapping with another ship.")
+def place_ship(grid, name, length, size, row, col, orientation):
+    if orientation == 'horizontal':
+        if 1 <= row <= size and 1 <= col + length <= size:
+            row -= 1
+            col -= 1
+        else:
+            print("That's an invalid ship placement. The ship does not fit on the grid.")
             return False
 
-    for i in range(length):
-        grid[row][col + i] = name[0] + str(i + 1)
+        for i in range(length):
+            if grid[row][col + i] != 'O':
+                print("That's an invalid ship placement. It's overlapping with another ship.")
+                return False
+
+        for i in range(length):
+            grid[row][col + i] = name[0] + str(i + 1)
+
+    elif orientation == 'vertical':
+        if 1 <= row + length <= size and 1 <= col <= size:
+            row -= 1
+            col -= 1
+        else:
+            print("That's an invalid ship placement. The ship does not fit on the grid.")
+            return False
+
+        for i in range(length):
+            if grid[row + i][col] != 'O':
+                print("That's an invalid ship placement. It's overlapping with another ship.")
+                return False
+
+        for i in range(length):
+            grid[row + i][col] = name[0] + str(i + 1)
+
+    else:
+        print("Invalid orientation. Please choose 'horizontal' or 'vertical'.")
+        return False
 
     return True
 
@@ -29,10 +51,11 @@ def randomly_place_ships(grid, num_ships, size):
     for i in range(num_ships):
         name = f"Ship{i + 1}"
         while True:
-            length = 1  # 1x1 ships
+            length = 2  # 2x1 ships
             row = random.randint(1, size)
             col = random.randint(1, size)
-            if place_ship(grid, name, length, size, row, col):
+            orientation = random.choice(['horizontal', 'vertical'])
+            if place_ship(grid, name, length, size, row, col, orientation):
                 break
 
 def computer_guess(user_ships, size):
@@ -44,11 +67,15 @@ def computer_guess(user_ships, size):
         if guess not in user_ships:
             return guess
 
-def is_valid_guess(guess, size):
-    if len(guess) != 2:
+def is_valid_guess(guess_str, size):
+    guess_list = guess_str.strip().split()
+    if len(guess_list) != 2:
         return False
-    row, col = guess
-    return 0 <= row < size and 0 <= col < size
+    try:
+        guess_row, guess_col = int(guess_list[0]), int(guess_list[1])
+        return 1 <= guess_row <= size and 1 <= guess_col <= size
+    except ValueError:
+        return False
 
 def check_hit_and_sunk(guess, ships):
     hit_ship = None
@@ -71,17 +98,17 @@ def check_hit_and_sunk(guess, ships):
         return "miss", None
 
 def battleship_game():
-    print("Welcome to Battleship!")
+    print("Welcome to Battleship! Let's Play !!")
 
     while True:
         try:
-            size = int(input("Enter the grid size (e.g., 5 for a 5x5 grid): "))
+            size = int(input("Please enter the grid size: "))
             if size >= 2:
                 break
             else:
-                print("Grid size must be at least 2. Try again.")
+                print("Your grid size must be at least 2. Please try again.")
         except ValueError:
-            print("Invalid input. Please enter a valid grid size.")
+            print("That's an invalid input. Please enter a valid grid size.")
 
     user_grid = create_grid(size)
     opponent_grid = create_grid(size)
@@ -89,18 +116,34 @@ def battleship_game():
     print("Your board:")
     print_board(user_grid, size)
 
-    place_option = input("Do you want to place your ship manually? (yes/no): ").lower()
+    place_option = input("Do you want to manually enter your ships? (yes/no): ").lower()
 
-    num_ships = int(input("Enter the number of ships you want to place: "))
+    num_ships = int(input("Please enter the number of ships you want to place: "))
 
     if place_option == 'yes':
         for i in range(num_ships):
-            name = input(f"Enter the name for Ship {i + 1}: ")
+            name = input(f"Please enter the name for ship {i + 1}: ")
             while True:
-                length = 1  # 1x1 ships
-                row = int(input(f"Enter the row index for the {name} (1 to {size}): "))
-                col = int(input(f"Enter the column index for the {name} (1 to {size}): "))
-                if place_ship(user_grid, name, length, size, row, col):
+                while True:
+                    try:
+                        length = int(input(f"Please enter the length for the {name} (1 or 2): "))
+                        if length in [1, 2]:
+                            break
+                        else:
+                            print("Invalid ship length. Please choose either 1 or 2.")
+                    except ValueError:
+                        print("Invalid input. Please enter a valid ship length.")
+
+                while True:
+                    orientation = input(f"Please enter the orientation for the {name} (horizontal/vertical): ").lower()
+                    if orientation in ['horizontal', 'vertical']:
+                        break
+                    else:
+                        print("Invalid orientation. Please choose 'horizontal' or 'vertical'.")
+
+                row = int(input(f"Please enter the row index for the {name} (1 to {size}): "))
+                col = int(input(f"Please enter the column index for the {name} (1 to {size}): "))
+                if place_ship(user_grid, name, length, size, row, col, orientation):
                     break
     else:
         randomly_place_ships(user_grid, num_ships, size)
@@ -110,29 +153,19 @@ def battleship_game():
 
     user_guesses = []
     opponent_guesses = []
-    max_attempts = 5
+    max_attempts = 6
 
     for attempt in range(max_attempts):
         print(f"\nAttempt {attempt + 1}: Your Turn")
-        guess_str = input("Enter your guess (format: row col): ")
+        guess_str = input("Please enter your guess (format: row col): ")
+
+        if not is_valid_guess(guess_str, size):
+            print("That's an invalid input. Please enter both row and column numbers between 1 and {size}.")
+            continue
+
         guess_list = guess_str.strip().split()
-
-        if len(guess_list) != 2:
-            print("Invalid input. Please enter both row and column numbers.")
-            continue
-
-        try:
-            guess_row = int(guess_list[0]) - 1
-            guess_col = int(guess_list[1]) - 1
-        except ValueError:
-            print("Invalid input. Please enter valid row and column numbers.")
-            continue
-
+        guess_row, guess_col = int(guess_list[0]) - 1, int(guess_list[1]) - 1
         guess = (guess_row, guess_col)
-
-        if not is_valid_guess(guess, size):
-            print(f"Invalid guess. Please enter numbers between 1 and {size}.")
-            continue
 
         user_guesses.append(guess)
 
@@ -143,7 +176,7 @@ def battleship_game():
         elif result == "hit":
             print("Congratulations! You hit an opponent's ship!")
         else:
-            print("You missed! Try again.")
+            print("You missed! Please try again.")
             opponent_grid[guess_row][guess_col] = '*'
 
         print("\nYour Board:")
@@ -184,4 +217,5 @@ def battleship_game():
         print("Thanks for playing Battleship!")
 
 # Run the game
+battleship_game()
 battleship_game()
