@@ -21,7 +21,7 @@ def print_board(board, hidden=True):
     for row in range(GRID_SIZE):
         print(chr(65 + row) + ' ', end='')  # Convert row index to letter label
         for col in range(GRID_SIZE):
-            if hidden and board[row][col] == 'B':
+            if hidden and board[row][col] == '0':
                 print('O', end=' ')
             else:
                 print(board[row][col], end=' ')
@@ -124,7 +124,7 @@ def battleship_game():
             Ship("Carrier", 5),
             Ship("Battleship", 4),
             Ship("Destroyer", 3),
-            Ship("Submarine", 2),
+            Ship("Submarine", 3),
             Ship("Patrol Boat", 2)
         ]
 
@@ -153,7 +153,7 @@ def battleship_game():
             Ship("Carrier", 5),
             Ship("Battleship", 4),
             Ship("Destroyer", 3),
-            Ship("Submarine", 2),
+            Ship("Submarine", 3),
             Ship("Patrol Boat", 2)
         ]
 
