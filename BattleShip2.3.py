@@ -21,7 +21,7 @@ def print_board(board, hidden=True):
     for row in range(GRID_SIZE):
         print(chr(65 + row) + ' ', end='')  # Convert row index to letter label
         for col in range(GRID_SIZE):
-            if hidden and board[row][col] == '0':
+            if hidden and board[row][col] == 'X':  # Hide the user's ships on the opponent's board
                 print('O', end=' ')
             else:
                 print(board[row][col], end=' ')
@@ -31,16 +31,16 @@ def place_ship_manually(board, ship):
     print(f"Placing {ship.name}")
     while True:
         try:
-            row = int(input(f"Enter the row index (1 to {GRID_SIZE}): "))
-            col_guess = input(f"Enter the column index (A to {chr(64 + GRID_SIZE)}): ").upper()
+            col_guess = int(input(f"Enter the row index (1 to {GRID_SIZE}): "))
+            row_guess = input(f"Enter the column index (A to {chr(64 + GRID_SIZE)}): ").upper()
             orientation = input("Choose the orientation (vertical/horizontal): ").lower()
             if orientation not in ['vertical', 'horizontal']:
                 print("Invalid orientation. Please choose either 'vertical' or 'horizontal'.")
                 continue
 
-            if 1 <= row <= GRID_SIZE:
-                row -= 1
-                col = ord(col_guess) - 65  # Convert the column letter to the corresponding index
+            if 1 <= col_guess <= GRID_SIZE and 'A' <= row_guess <= chr(64 + GRID_SIZE):
+                row = ord(row_guess) - 65  # Convert the row letter to the corresponding index
+                col = col_guess - 1
 
                 # Check if the ship can be placed in the chosen position
                 if orientation == 'vertical':
@@ -98,12 +98,12 @@ def place_ship_randomly(board, ship, ships):
 def is_valid_guess(guess):
     if len(guess) != 2:
         return False
-    row, col_guess = guess
-    if 1 <= row <= GRID_SIZE and 'A' <= col_guess <= chr(64 + GRID_SIZE):
-        col = ord(col_guess) - 65
-        return True, (row - 1, col)
+    row_guess, col_guess = guess
+    if 1 <= col_guess <= GRID_SIZE and 'A' <= row_guess <= chr(64 + GRID_SIZE):
+        row = ord(row_guess) - 65
+        col = col_guess - 1
+        return True, (row, col)
     return False, None
-
 def is_grid_full(board):
     for i in range(GRID_SIZE):
         for j in range(GRID_SIZE):
@@ -117,88 +117,89 @@ def battleship_game():
     user_board = create_grid()
     computer_board = create_grid()
 
-    place_option = input("Do you want to manually place your ships? (yes/no): ").lower()
+    while True:
+        place_option = input("Do you want to manually place your ships? (yes/no): ").lower()
+        if place_option == 'yes':
+            ships = [
+                Ship("Carrier", 5),
+                Ship("Battleship", 4),
+                Ship("Destroyer", 3),
+                Ship("Submarine", 3),
+                Ship("Patrol Boat", 2)
+            ]
 
-    if place_option == 'yes':
-        ships = [
-            Ship("Carrier", 5),
-            Ship("Battleship", 4),
-            Ship("Destroyer", 3),
-            Ship("Submarine", 3),
-            Ship("Patrol Boat", 2)
-        ]
+            user_ships = []
+            for ship in ships:
+                print(f"\n{ship.name} ({ship.length} long)")
+                user_row, user_col, orientation = place_ship_manually(user_board, ship)
+                user_ships.append((user_row, user_col, ship.length, orientation))  # Store the orientation as well
+                if orientation == 'vertical':
+                    for i in range(ship.length):
+                        if i == 0:
+                            user_board[user_row][user_col] = ship.name[0]
+                        else:
+                            if user_row + i < GRID_SIZE:
+                                user_board[user_row + i][user_col] = ship.name[0]
+                else:
+                    for i in range(ship.length):
+                        if i == 0:
+                            user_board[user_row][user_col] = ship.name[0]
+                        else:
+                            if user_col + i < GRID_SIZE:
+                                user_board[user_row][user_col + i] = ship.name[0]
+            break
+        elif place_option == 'no':
+            ships = [
+                Ship("Carrier", 5),
+                Ship("Battleship", 4),
+                Ship("Destroyer", 3),
+                Ship("Submarine", 3),
+                Ship("Patrol Boat", 2)
+            ]
 
-        user_ships = []
-        for ship in ships:
-            print(f"\n{ship.name} ({ship.length} long)")
-            user_row, user_col, orientation = place_ship_manually(user_board, ship)
-            user_ships.append((user_row, user_col, ship.length, orientation))  # Store the orientation as well
-            if orientation == 'vertical':
-                for i in range(ship.length):
-                    if i == 0:
-                        user_board[user_row][user_col] = ship.name[0]
-                    else:
-                        if user_row + i < GRID_SIZE:
-                            user_board[user_row + i][user_col] = ship.name[0]
-            else:
-                for i in range(ship.length):
-                    if i == 0:
-                        user_board[user_row][user_col] = ship.name[0]
-                    else:
-                        if user_col + i < GRID_SIZE:
-                            user_board[user_row][user_col + i] = ship.name[0]
+            user_ships = []
+            for ship in ships:
+                user_row, user_col, orientation = place_ship_randomly(user_board, ship, user_ships)
+                user_ships.append((user_row, user_col, ship.length, orientation))  # Store the orientation as well
+                if orientation == 'vertical':
+                    for i in range(ship.length):
+                        if i == 0:
+                            user_board[user_row][user_col] = ship.name[0]
+                        else:
+                            if user_row + i < GRID_SIZE:
+                                user_board[user_row + i][user_col] = ship.name[0]
+                else:
+                    for i in range(ship.length):
+                        if i == 0:
+                            user_board[user_row][user_col] = ship.name[0]
+                        else:
+                            if user_col + i < GRID_SIZE:
+                                user_board[user_row][user_col + i] = ship.name[0]
+            break
+        else:
+            print("Invalid input. Please enter 'yes' or 'no'.")
 
-    else:
-        ships = [
-            Ship("Carrier", 5),
-            Ship("Battleship", 4),
-            Ship("Destroyer", 3),
-            Ship("Submarine", 3),
-            Ship("Patrol Boat", 2)
-        ]
-
-        user_ships = []
-        for ship in ships:
-            user_row, user_col, orientation = place_ship_randomly(user_board, ship, user_ships)
-            user_ships.append((user_row, user_col, ship.length, orientation))  # Store the orientation as well
-            if orientation == 'vertical':
-                for i in range(ship.length):
-                    if i == 0:
-                        user_board[user_row][user_col] = ship.name[0]
-                    else:
-                        if user_row + i < GRID_SIZE:
-                            user_board[user_row + i][user_col] = ship.name[0]
-            else:
-                for i in range(ship.length):
-                    if i == 0:
-                        user_board[user_row][user_col] = ship.name[0]
-                    else:
-                        if user_col + i < GRID_SIZE:
-                            user_board[user_row][user_col + i] = ship.name[0]
-
+    # Place opponent's ships randomly on the computer board
     computer_ships = []
-    for i in range(len(ships)):
-        ship = ships[i]
-        ship_name = f"Opponent's {ship.name}"
-        length = ship.length
+    for ship in ships:
         computer_row, computer_col, orientation = place_ship_randomly(computer_board, ship, computer_ships)
         computer_ships.append((computer_row, computer_col, ship.length, orientation))  # Store the orientation as well
         if orientation == 'vertical':
             for i in range(ship.length):
                 if i == 0:
-                    computer_board[computer_row][computer_col] = ship.name[0]
+                    computer_board[computer_row][computer_col] = 'O'
                 else:
                     if computer_row + i < GRID_SIZE:
-                        computer_board[computer_row + i][computer_col] = ship.name[0]
+                        computer_board[computer_row + i][computer_col] = 'O'
         else:
             for i in range(ship.length):
                 if i == 0:
-                    computer_board[computer_row][computer_col] = ship.name[0]
+                    computer_board[computer_row][computer_col] = 'O'
                 else:
                     if computer_col + i < GRID_SIZE:
-                        computer_board[computer_row][computer_col + i] = ship.name[0]
+                        computer_board[computer_row][computer_col + i] = 'O'
 
-    num_turns = 20  # Maximum number of turns = number of cells on the grid
+    num_turns = 100  # Maximum number of turns = number of cells on the grid
     for turn in range(num_turns):
         print(f"\nTurn {turn + 1}:")
         if turn % 2 == 0:
@@ -214,8 +215,8 @@ def battleship_game():
 
         while True:
             try:
-                row_guess = int(input(f"Enter the row index (1 to {GRID_SIZE}): "))
-                col_guess = input(f"Enter the column index (A to {chr(64 + GRID_SIZE)}): ").upper()
+                col_guess = int(input(f"Enter the row index (1 to {GRID_SIZE}): "))
+                row_guess = input(f"Enter the column index (A to {chr(64 + GRID_SIZE)}): ").upper()
                 is_valid, (row_guess, col_guess) = is_valid_guess((row_guess, col_guess))
                 if is_valid:
                     break
@@ -226,13 +227,13 @@ def battleship_game():
 
         if (row_guess, col_guess) in computer_ships:
             for ship in ships:
-                if computer_board[row_guess][col_guess] == ship.name[0]:
+                if computer_board[row_guess][col_guess] == 'O':  # Check if the opponent's shot hit a ship on user's grid
                     ship_name = ship.name
                     break
-            print(f"Congratulations! You hit {ship_name}!")
+            print(f"Congratulations! The opponent hit your {ship_name}!")
             computer_board[row_guess][col_guess] = 'X'
         else:
-            print("You missed!")
+            print("The opponent missed!")
             computer_board[row_guess][col_guess] = '*'
 
         # Computer's turn
@@ -246,7 +247,7 @@ def battleship_game():
                 if user_board[computer_guess_row][computer_guess_col] == ship.name[0]:
                     ship_name = ship.name
                     break
-            print(f"The opponent hit your {ship_name}!")
+            print(f"The opponent hit the {ship_name}!")
             user_board[computer_guess_row][computer_guess_col] = 'X'
         else:
             print("The opponent missed!")
@@ -273,4 +274,3 @@ def battleship_game():
         print("Thanks for playing Battleship!")
 
 battleship_game()
-
